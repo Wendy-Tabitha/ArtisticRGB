@@ -67,6 +67,7 @@ type Color struct {
 	R, G, B int
 }
 
+// This functions contains the colors to be used when adding a color to a string
 func ParseColor(s string) (Color, bool) {
 	colorMap := map[string]Color{
 		"red":       {255, 0, 0},

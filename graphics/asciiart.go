@@ -2,7 +2,7 @@ package graphics
 
 import (
 	"fmt"
-	"os"
+	"strconv"
 	"strings"
 )
 
@@ -13,10 +13,11 @@ func Graphic(str, banner []string, colorString, colorSubstr string) string {
 
 	color, ok := ParseColor(colorString)
 	if !ok && colorString != "" {
-		fmt.Printf("Invalid color: %q\n", colorString)
-		os.Exit(1)
+		invalidColor := fmt.Sprintf("Invalid color: %q\n", colorString)
+		return invalidColor
 	}
 
+	// This ia an anonymous function whereby the variable is just called for color implementation.
 	doColor := func(i int, lineString string) {
 		for _, runechar := range lineString {
 			index := (runechar-32)*9 + rune(i)
@@ -42,7 +43,7 @@ func Graphic(str, banner []string, colorString, colorSubstr string) string {
 			}
 			continue
 		}
-
+		// This loop checks and colors the substring.
 		for i := 1; i <= lines; i++ {
 			substrSplits := strings.Split(lineString, colorSubstr)
 			for j, split := range substrSplits {
@@ -67,7 +68,7 @@ type Color struct {
 	R, G, B int
 }
 
-// This functions contains the colors to be used when adding a color to a string
+// This function contains the colors that are parsed at the flag.
 func ParseColor(s string) (Color, bool) {
 	colorMap := map[string]Color{
 		"red":       {255, 0, 0},
@@ -93,5 +94,20 @@ func ParseColor(s string) (Color, bool) {
 	}
 
 	color, ok := colorMap[s]
-	return color, ok
+	if ok {
+		return color, ok
+	}
+
+	// Parse #ff00ff
+	if len(s) == 7 && s[0] == '#' {
+		r, err1 := strconv.ParseInt(s[1:3], 16, 32)
+		g, err2 := strconv.ParseInt(s[3:5], 16, 32)
+		b, err3 := strconv.ParseInt(s[5:7], 16, 32)
+
+		if err1 == nil && err2 == nil && err3 == nil {
+			return Color{int(r), int(g), int(b)}, true
+		}
+	}
+
+	return color, false
 }

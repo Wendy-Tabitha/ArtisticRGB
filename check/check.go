@@ -9,13 +9,19 @@ import (
 	"ascii/types"
 )
 
+// PrintUsage prints the program usage information, then exits the program with the error code 1.
+func PrintUsage() {
+	usage := "Usage: go run . [OPTION] [STRING]\n\nEX: go run . --color=<color> <substring to be colored> \"something\""
+	fmt.Println(usage)
+	return
+}
+
 // Usage checks if the program was supplied the expected command-line arguments, exits on usage error.
 func Usage(args []string) types.Data {
-	if len(args) == 0 {
-		PrintUsage()
-	} else if len(args) > 4 {
+	if len(args) == 0 || len(args) > 4 {
 		PrintUsage()
 	}
+
 	var out types.Data
 
 	if len(args) == 1 {
@@ -56,28 +62,22 @@ func Usage(args []string) types.Data {
 	return out
 }
 
-// PrintUsage prints the program usage information, then exits the program with the error code 1.
-func PrintUsage() {
-	usage := "Usage: go run . [OPTION] [STRING]\n\nEX: go run . --color=<color> <substring to be colored> \"something\""
-	fmt.Println(usage)
-	os.Exit(1)
-}
-
+// This function is used to handle new line characters and also check for non ascii characters
 func Text(text string) string {
 	text = strings.ReplaceAll(text, "\n", "\\n")
 
 	if text == "" {
-		os.Exit(1)
+		os.Exit(0)
 	} else if text == "\\n" {
 		fmt.Println()
-		os.Exit(1)
+		os.Exit(0)
 	}
 
 	out := ""
 	for _, char := range text {
 		if char > '~' {
 			fmt.Println("Error: Non-ASCII character found! Cannot display the graphic representation")
-			os.Exit(1)
+			os.Exit(0)
 		} else if char >= ' ' {
 			out += string(char)
 		}

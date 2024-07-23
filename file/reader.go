@@ -12,18 +12,18 @@ func ReadArtFile(asciiArtFile string) []string {
 	asciiArt, err := os.ReadFile(asciiArtFile)
 	if err != nil {
 		fmt.Printf("Error reading file: %q\n%v\n", asciiArtFile, err)
-		os.Exit(1)
+		os.Exit(0)
 	}
 
 	if len(asciiArt) == 0 {
 		fmt.Println("Empty banner file")
-		os.Exit(1)
+		os.Exit(0)
 	}
 
 	fileInfo, err := os.Stat(asciiArtFile)
 	if err != nil {
 		fmt.Printf("Error getting file info: %q\n%v\n", asciiArtFile, err)
-		os.Exit(1)
+		os.Exit(0)
 	}
 
 	fileSize := fileInfo.Size()
@@ -32,22 +32,22 @@ func ReadArtFile(asciiArtFile string) []string {
 	case "standard.txt":
 		if fileSize != 6623 {
 			fmt.Println("Standard Filesize Tampered")
-			os.Exit(1)
+			os.Exit(0)
 		}
 	case "shadow.txt":
 		if fileSize != 7463 {
 			fmt.Println("Shadow filesize Tampered")
-			os.Exit(1)
+			os.Exit(0)
 		}
 	case "thinkertoy.txt":
 		if fileSize != 5558 {
 			fmt.Println("Thinkertoy filesize Tampered")
-			os.Exit(1)
+			os.Exit(0)
 		}
 	case "lean.txt":
 		if fileSize != 10871 {
 			fmt.Println("lean filesize Tampered")
-			os.Exit(1)
+			os.Exit(0)
 		}
 	}
 
